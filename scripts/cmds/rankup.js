@@ -5,8 +5,8 @@ const { drive } = global.utils;
 module.exports = {
 	config: {
 		name: "rankup",
-		version: "1.2",
-		author: "NTKhang",
+		version: "1.3",
+		author: "NTKhang | + LiANE (slight modifications)",
 		countDown: 5,
 		role: 0,
 		shortDescription: {
@@ -28,16 +28,16 @@ module.exports = {
 
 	langs: {
 		vi: {
-			syntaxError: "Sai cú pháp, chỉ có thể dùng {pn} on hoặc {pn} off",
-			turnedOn: "Đã bật thông báo level up",
-			turnedOff: "Đã tắt thông báo level up",
-			notiMessage: "🎉🎉 chúc mừng bạn đạt level %1"
+			syntaxError: "⚠ | Sai cú pháp, chỉ có thể dùng {pn} on hoặc {pn} off",
+			turnedOn: "✅ | Đã bật thông báo level up",
+			turnedOff: "✅ | Đã tắt thông báo level up",
+			notiMessage: "🎉🎉 chúc mừng %1 đã đạt level %2"
 		},
 		en: {
-			syntaxError: "Syntax error, only use {pn} on or {pn} off",
-			turnedOn: "Turned on level up notification",
-			turnedOff: "Turned off level up notification",
-			notiMessage: "🎉🎉 Congratulations on reaching level %1"
+			syntaxError: "⚠ | Syntax error, only use {pn} on or {pn} off",
+			turnedOn: "✅ | Turned on level up notification",
+			turnedOff: "✅ | Turned off level up notification",
+			notiMessage: "🎉🎉 Congratulations %1 on reaching level %2"
 		}
 	},
 
@@ -49,15 +49,18 @@ module.exports = {
 	},
 
 	onChat: async function ({ threadsData, usersData, event, message, getLang }) {
+		const data = await usersData.get(event.senderID);
+		const userName = data.name;
+
 		const threadData = await threadsData.get(event.threadID);
 		const sendRankupMessage = threadData.settings.sendRankupMessage;
 		if (!sendRankupMessage)
 			return;
-		const { exp } = await usersData.get(event.senderID);
+		const { exp } = data;
 		const currentLevel = expToLevel(exp);
 		if (currentLevel > expToLevel(exp - 1)) {
 			const forMessage = {
-				body: getLang("notiMessage", currentLevel)
+				body: getLang("notiMessage", userName, currentLevel)
 			};
 			if (threadData.data.rankup?.attachments?.length > 0) {
 				const files = threadData.data.rankup.attachments;

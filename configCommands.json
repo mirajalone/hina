@@ -25,11 +25,25 @@
     },
     "dhbc": {
       "reward": 1000
-    }
+    },
+    "gay": {
+      "deltaNext": 5
+    },
+    "info": {},
+    "nickname": {
+      "delayPerGroup": 250
+    },
+    "notice": {
+      "delayPerGroup": 250
+    },
+    "qr": {}
   },
   "envEvents": {
     "logsbot": {
       "allow": true
     }
-  }
+  },
+  "commandUnload": [
+    "hina2.js"
+  ]
 }
